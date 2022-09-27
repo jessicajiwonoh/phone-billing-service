@@ -1,3 +1,4 @@
 venv/
-
 instance/
+#Python Cache
+*.pyc
