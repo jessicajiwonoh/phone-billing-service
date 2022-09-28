@@ -2,3 +2,4 @@ venv/
 instance/
 #Python Cache
 *.pyc
+*.db
