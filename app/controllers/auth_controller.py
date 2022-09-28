@@ -5,7 +5,7 @@ from flask import(
 )
 
 from app import db
-from app.models.account import Account, Customer
+from app.models import *
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 

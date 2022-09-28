@@ -1,14 +1,7 @@
-from urllib import request, response
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 
 from app import db
-from app.models.invoice import Invoice
-
-customer_to_po = db.Table('customer_to_po',
-    db.Column('customer_id', db.Integer, db.ForeignKey('customer.id'), primary_key=True),
-    db.Column('po_id', db.Integer, db.ForeignKey('phone_operator.id'), primary_key=True)
-)
 
 class Account(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -28,16 +21,6 @@ class Account(db.Model):
 
     def check_password(self, value):
         return check_password_hash(self.password_hash, value)
-
-class Customer(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    account_id = db.Column(db.Integer, db.ForeignKey('account.id'), nullable=False)
-    invoices = db.relationship('Invoice', lazy='select',
-        backref=db.backref('customer', lazy='joined'))
-
-class PhoneOperator(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    account_id = db.Column(db.Integer, db.ForeignKey('account.id'), nullable=False)
 
 def __repr__(self):
    return f"Account({self.id}, {self.username})"
