@@ -1,9 +1,15 @@
 from sqlalchemy import event
+from datetime import datetime, timedelta
 
 from app import db
 from app import models
 
 # Initialize test.db
+
+now = datetime.now()
+ten_min_ago = now - timedelta(minutes=10)
+fiften_min_ago = now - timedelta(minutes=15)
+thirty_min_ago = now - timedelta(minutes=30)
 
 @event.listens_for(models.Account.__table__, 'after_create')
 def create_accounts(*args, **kwargs):
@@ -32,4 +38,17 @@ def create_po_to_cust(*args, **kwargs):
     op = models.Operator(account_id=5)
     db.session.add_all([cust_first, cust_second])
     op.customers.extend([cust_first, cust_second])
+    db.session.commit()
+
+@event.listens_for(models.Call.__table__, 'after_create')
+def create_calls(*args, **kwargs):
+    db.session.add(models.Call(customer_id=1, start_timestamp=fiften_min_ago, end_timestamp=now))
+    db.session.add(models.Call(customer_id=2, start_timestamp=ten_min_ago, end_timestamp=now))
+    db.session.add(models.Call(customer_id=3, start_timestamp=thirty_min_ago, end_timestamp=now))
+    db.session.add(models.Call(customer_id=1, start_timestamp=thirty_min_ago, end_timestamp=now))
+    db.session.commit()
+    
+@event.listens_for(models.Invoice.__table__, 'after_create')
+def create_invoices(*args, **kwargs):
+    db.session.add(models.Invoice(customer_id=1, amount_billed=100, date_billed=now))
     db.session.commit()
