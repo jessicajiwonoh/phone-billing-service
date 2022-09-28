@@ -31,6 +31,21 @@ def load_logged_in_user():
     else:
         g.account = None
 
+# # Anything that takes user input is a controller
+# @bp.route("/populate", methods=("GET", "POST"))
+# def populate():
+#     op = Operator(account_id=1)
+#     #db.session.add(op)
+#     db.session.add(Operator(account_id=3))
+    
+#     cust = Customer(account_id=5)
+#     #db.session.add(cust)
+#     db.session.add_all([cust, op])
+#     db.session.commit()
+#     op.customers.append(cust)
+#     db.session.commit()
+
+
 # Anything that takes user input is a controller
 @bp.route("/register", methods=("GET", "POST"))
 def register():
@@ -54,7 +69,7 @@ def register():
 
         if error is None:
             # the name is available, create the user and go to the login page
-            db.session.add(Account(username=username, password_hash=password))
+            db.session.add(Account(username=username, password=password))
             db.session.commit()
             return redirect(url_for("auth.login"))
 
@@ -69,7 +84,6 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         error = None
-        print(Account.query.all())
         select = db.select(Account).filter_by(username=username)
         account = db.session.execute(select).scalar()
 

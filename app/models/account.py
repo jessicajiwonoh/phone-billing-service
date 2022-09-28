@@ -9,7 +9,7 @@ class Account(db.Model):
     password_hash = db.Column(db.String, nullable=False)
     customers = db.relationship('Customer', lazy='select',
         backref=db.backref('account', lazy='joined'))
-    phone_op = db.relationship('PhoneOperator', lazy='select',
+    operator = db.relationship('Operator', lazy='select',
         backref=db.backref('account', lazy='joined'))
 
     def set_password(self, value):
@@ -20,7 +20,7 @@ class Account(db.Model):
     password = property(fset=set_password)
 
     def check_password(self, value):
-        return check_password_hash(self.password_hash, value)
+        return check_password_hash(self.password, value)
 
 def __repr__(self):
    return f"Account({self.id}, {self.username})"
