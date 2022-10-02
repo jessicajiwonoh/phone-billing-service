@@ -57,6 +57,7 @@ def create_app(test_config=None):
     from app import controllers
     app.register_blueprint(controllers.auth_bp)
     app.register_blueprint(controllers.call_bp)
+    app.register_blueprint(controllers.invoice_bp)
     return app
 
 def init_db():

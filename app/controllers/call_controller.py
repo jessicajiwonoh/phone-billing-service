@@ -22,6 +22,10 @@ def get_all_calls():
     calls = db.session.execute(select).scalars()
     return json.dumps(Call.serialize_list(calls))
 
+def get_call_history_by_customer():
+    select = db.select(Call).order_by(Call.start_timestamp.desc())
+    return
+
 @call_bp.route("/")
 def index():
     return Response(json.dumps(get_all_calls()), mimetype='application/json')
@@ -31,3 +35,11 @@ def index():
 #     calls = get_all_calls()
 #     print(calls)
 #     return render_template("auth/register.html")
+
+# Get call by customer
+# • Receive number of minutes for each customer call
+# • Provide the call history by user
+# • Calculate the period total and generate the invoice for a customer
+# • As a phone operator I want all customer calls to be charged.
+# • As a customer I want to be able to see my phone call history.
+# • As a customer I want to receive my invoice every first day of the month.

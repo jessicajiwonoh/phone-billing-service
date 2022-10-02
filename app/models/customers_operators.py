@@ -8,8 +8,6 @@ po_to_cust = db.Table('po_to_cust',
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     account_id = db.Column(db.Integer, db.ForeignKey('account.id'), nullable=False)
-    invoices = db.relationship('Invoice', lazy='select',
-        backref=db.backref('customer', lazy='joined'))
 
 class Operator(db.Model):
     id = db.Column(db.Integer, primary_key=True)

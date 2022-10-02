@@ -31,21 +31,6 @@ def load_logged_in_user():
     else:
         g.account = None
 
-# # Anything that takes user input is a controller
-# @bp.route("/populate", methods=("GET", "POST"))
-# def populate():
-#     op = Operator(account_id=1)
-#     #db.session.add(op)
-#     db.session.add(Operator(account_id=3))
-    
-#     cust = Customer(account_id=5)
-#     #db.session.add(cust)
-#     db.session.add_all([cust, op])
-#     db.session.commit()
-#     op.customers.append(cust)
-#     db.session.commit()
-
-
 # Anything that takes user input is a controller
 @auth_bp.route("/register", methods=("GET", "POST"))
 def register():
