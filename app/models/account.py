@@ -20,7 +20,7 @@ class Account(db.Model):
     password = property(fset=set_password)
 
     def check_password(self, value):
-        return check_password_hash(self.password, value)
+        return check_password_hash(self.password_hash, value)
 
 def __repr__(self):
    return f"Account({self.id}, {self.username})"

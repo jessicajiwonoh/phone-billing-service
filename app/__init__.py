@@ -55,7 +55,8 @@ def create_app(test_config=None):
 
     # apply the blueprints to the app
     from app import controllers
-    app.register_blueprint(controllers.bp)
+    app.register_blueprint(controllers.auth_bp)
+    app.register_blueprint(controllers.call_bp)
     return app
 
 def init_db():

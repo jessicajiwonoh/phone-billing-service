@@ -1,3 +1,4 @@
+from .serializer import Serializer
 from .account import Account
 from .call import Call
 from .customers_operators import Customer, Operator, po_to_cust
