@@ -58,4 +58,6 @@ def create_calls(*args, **kwargs):
 @event.listens_for(models.Invoice.__table__, 'after_create')
 def create_invoices(*args, **kwargs):
     db.session.add(models.Invoice(customer_id=1, amount_billed=100, date_billed=now))
+    db.session.add(models.Invoice(customer_id=2, amount_billed=145, date_billed=now))
+    db.session.add(models.Invoice(customer_id=3, amount_billed=55, date_billed=now))
     db.session.commit()

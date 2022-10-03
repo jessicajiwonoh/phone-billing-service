@@ -3,7 +3,7 @@ from datetime import datetime
 from collections import defaultdict
 from dateutil.relativedelta import relativedelta
 from flask import(
-    Blueprint, g, redirect, session, url_for, Response
+    Blueprint, g, redirect, session, url_for, Response, request
 )
 
 from app import db
@@ -59,9 +59,11 @@ def calculate_invoice_per_period(customer_id, month):
     monthly_call = defaultdict(int)
     
     if month is not None:
+        month = int(month)
         monthly = call_rates[month]
-        
+ 
         for idx in monthly:
+            print(monthly)
             rate = idx[0]['rate']
             monthly_call[month] += rate
     else:
@@ -76,23 +78,32 @@ def calculate_invoice_per_period(customer_id, month):
 # Index returns all invoices
 @invoice_bp.route('/')
 def index():
-    return Response(json.dumps(get_all_invoices()), mimetype='application/json')
+    return get_all_invoices()
 
-@invoice_bp.route('/customer=<int:customer_id>')
-def get_invoice_per_customer(customer_id):
+# Get the invoice history by customer id
+@invoice_bp.route('/customer')
+def get_invoice_per_customer():
+    customer_id = request.form.get('customer')
     return Response(json.dumps(calculate_call_rate(customer_id)), mimetype='application/json')
 
-@invoice_bp.route('/customer=<int:customer_id>/monthly')
-def get_monthly_invoice(customer_id):
+# Get consolidated invoice by month for specific customer id
+@invoice_bp.route('/consolidated')
+def get_consolidated_invoice():
+    customer_id = request.form.get('customer')
     return Response(json.dumps(calculate_invoice_per_period(customer_id, None)), mimetype='application/json')
 
-@invoice_bp.route('/customer=<int:customer_id>/month=<int:month>')
-def get_specific_month_invoice(customer_id, month):
-    return Response(json.dumps(calculate_invoice_per_period(customer_id, month)), mimetype='application/json')
+# Get specific month invoice by customer id
+@invoice_bp.route('/month')
+def get_specific_month_invoice():
+    customer_id = request.form.get('customer')
+    month_int = request.form.get('month')
+    return Response(json.dumps(calculate_invoice_per_period(customer_id, month_int)), mimetype='application/json')
 
 # Customers receive invoice every first day of the month
-@invoice_bp.route('/customer=<int:customer_id>/receive_invoice', methods=['GET', 'POST'])
-def add_invoice_by_customer(customer_id):
+@invoice_bp.route('/generate_invoice', methods=['POST'])
+def generate_invoice_by_customer():
+    customer_id = request.form.get('customer')
+    
     today = datetime.now()
     a_month_ago = today - relativedelta(months=1)
 
