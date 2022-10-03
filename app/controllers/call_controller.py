@@ -1,16 +1,17 @@
 import json
+from datetime import datetime, timedelta
 from flask import(
-    Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify, Response
+    Blueprint, g, redirect, session, url_for, Response
 )
 
 from app import db
 from app.models import Call
 
-call_bp = Blueprint("call", __name__, url_prefix="/call")
+call_bp = Blueprint('call', __name__, url_prefix='/call')
 
 @call_bp.before_app_request
 def load_calls():
-    call_id = session.get("call_id")
+    call_id = session.get('call_id')
     
     if call_id is not None:
         g.call = db.session.get(Call, call_id)
@@ -20,26 +21,30 @@ def load_calls():
 def get_all_calls():
     select = db.select(Call).order_by(Call.start_timestamp.desc())
     calls = db.session.execute(select).scalars()
-    return json.dumps(Call.serialize_list(calls))
+    return Response(json.dumps(Call.serialize_list(calls)), mimetype='application/json')
 
-def get_call_history_by_customer():
-    select = db.select(Call).order_by(Call.start_timestamp.desc())
-    return
-
-@call_bp.route("/")
+# Index returns all calls
+@call_bp.route('/')
 def index():
-    return Response(json.dumps(get_all_calls()), mimetype='application/json')
+    return get_all_calls()
 
-# @call_bp.route("/all")
-# def calls_api():
-#     calls = get_all_calls()
-#     print(calls)
-#     return render_template("auth/register.html")
+# Get the call history by customer id
+@call_bp.route('/customer=<int:customer_id>')
+def get_call_history_by_customer(customer_id):
+    select_customer = db.select(Call).filter_by(customer_id=customer_id)
+    calls_by_customer = db.session.execute(select_customer).scalars()
 
-# Get call by customer
-# • Receive number of minutes for each customer call
-# • Provide the call history by user
-# • Calculate the period total and generate the invoice for a customer
-# • As a phone operator I want all customer calls to be charged.
-# • As a customer I want to be able to see my phone call history.
-# • As a customer I want to receive my invoice every first day of the month.
+    return Response(json.dumps(Call.serialize_list(calls_by_customer)), mimetype='application/json')
+
+# Post incoming call by customer id
+# Record when the call is ended(datetime.now())
+# Redirect after adding a new call to show the call history by customer
+@call_bp.route('/customer=<int:customer_id>/add_call_min=<int:min>', methods=["GET", "POST"])
+def add_call_by_customer(customer_id, min):
+    end_timestamp = datetime.now()
+    start_timestamp = end_timestamp - timedelta(minutes=min)
+    new_call = Call(customer_id=1, start_timestamp=start_timestamp, end_timestamp=end_timestamp)
+    db.session.add(new_call)
+    db.session.commit()
+    
+    return redirect(url_for("call.get_call_history_by_customer", customer_id=customer_id))
