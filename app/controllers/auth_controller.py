@@ -48,7 +48,7 @@ def register():
         elif not password:
             error = "Password is required."
         elif db.session.execute(
-            db.select(db.select(Account).filter_by(username=username).exists())
+            db.select((Account).filter_by(username=username).exists())
         ).scalar():
             error = f"Account {username} is already registered."
 
@@ -69,7 +69,7 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         error = None
-        select = db.select(Account).filter_by(username=username)
+        select = (Account).filter_by(username=username)
         account = db.session.execute(select).scalar()
 
         if account is None:
