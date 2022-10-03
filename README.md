@@ -1,13 +1,13 @@
 # Phone Billing Service
 This microservice is built to implement a very simple phone billing system.
 
-## Requirements:
+## Requirements
 * Receive number of minutes for each customer call.
 * Provide the call history by user.
 * Calculate the period total and generate the invoice for a customer.
 * Must have a database where call history and invoices are stored.
 
-## Use Cases:
+## Use Cases
 * As a phone operator I want all my customer calls to be charged.
 * As a customer I want to be able to see my phone call history.
 * As a customer I want to receive my invoice every first day of the month.
@@ -192,4 +192,4 @@ POST '/invoice/generate_invoice'
 
 ### Account, Customer, Operator Relationship
 * Both Customer model and Operator model is related to Account model.
-* po_to_cust table is created for easier usability since this way operators can be linked with multiple customers and vice versa for customers.
+* po_to_cust table is created for easier usability since this way operators can be linked with multiple customers and vice versa for customers (e.g. Same customer can have MetroPCS and T-Mobile operators).
