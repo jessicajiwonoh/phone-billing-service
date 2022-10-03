@@ -22,4 +22,4 @@ class Invoice(db.Model, Serializer):
         return serialized
 
 def __repr__(self):
-   return f"Invoice({self.id}, {self.customer_id}, {self.amount_billed}, {self.date_billed}, {self.date_paid})"
+   return f'Invoice({self.id}, {self.customer_id}, {self.amount_billed}, {self.date_billed}, {self.date_paid})'

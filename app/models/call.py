@@ -21,4 +21,4 @@ class Call(db.Model, Serializer):
         return serialized
 
 def __repr__(self):
-   return f"Call({self.id}, {self.customer_id}, {self.start_timestamp}, {self.end_timestamp})"
+   return f'Call({self.id}, {self.customer_id}, {self.start_timestamp}, {self.end_timestamp})'

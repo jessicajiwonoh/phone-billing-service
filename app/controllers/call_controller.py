@@ -39,12 +39,12 @@ def get_call_history_by_customer(customer_id):
 # Post incoming call by customer id
 # Record when the call is ended(datetime.now())
 # Redirect after adding a new call to show the call history by customer
-@call_bp.route('/customer=<int:customer_id>/add_call_min=<int:min>', methods=["GET", "POST"])
+@call_bp.route('/customer=<int:customer_id>/add_call_min=<int:min>', methods=['GET', 'POST'])
 def add_call_by_customer(customer_id, min):
     end_timestamp = datetime.now()
     start_timestamp = end_timestamp - timedelta(minutes=min)
-    new_call = Call(customer_id=1, start_timestamp=start_timestamp, end_timestamp=end_timestamp)
+    new_call = Call(customer_id=customer_id, start_timestamp=start_timestamp, end_timestamp=end_timestamp)
     db.session.add(new_call)
     db.session.commit()
     
-    return redirect(url_for("call.get_call_history_by_customer", customer_id=customer_id))
+    return redirect(url_for('call.get_call_history_by_customer', customer_id=customer_id))

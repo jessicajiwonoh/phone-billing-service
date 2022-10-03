@@ -16,4 +16,4 @@ class Operator(db.Model):
         backref=db.backref('operators'))
 
 def __repr__(self):
-   return f"Phone Operator({self.po_id}, Customner{self.customer_id})"
+   return f'Phone Operator({self.po_id}, Customner{self.customer_id})'
