@@ -184,7 +184,7 @@ POST '/invoice/generate_invoice'
 
 ## Scalability
 
-### Support different billing plans
+### Support Different Billing Plans
 * Billing plan options: prepaid, fixed amount.
 * Add billing_plan to Customer model.
 * Operator model is added to support customers with different billing plans.
