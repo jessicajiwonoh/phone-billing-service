@@ -86,7 +86,7 @@ def get_invoice_per_customer():
     customer_id = request.form.get('customer')
     return Response(json.dumps(calculate_call_rate(customer_id)), mimetype='application/json')
 
-# Get consolidated invoice by month for specific customer id
+# Get consolidated invoice per month for specific customer id
 @invoice_bp.route('/consolidated')
 def get_consolidated_invoice():
     customer_id = request.form.get('customer')
