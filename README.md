@@ -21,7 +21,7 @@ This microservice is built to implement a very simple phone billing system.
 * Activate virtual environment: `source venv/bin/activate`
 
 #### PIP Dependencies
-* Install dependencies: `python -m pip install -r requirements.txt`
+* Install dependencies: `pip install -r requirements.txt`
 
 #### Running the server
 * To initiate database using `initialize_db.py` for testing purposes: `flask init-db`
